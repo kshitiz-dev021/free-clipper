@@ -1,0 +1,29 @@
+services:
+  backend:
+    build:
+      context: .
+      args:
+        WHISPER_MODEL: ${WHISPER_MODEL:-base}
+    env_file: .env
+    environment:
+      PORT: "7860"
+      FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-http://localhost:3000}
+    ports:
+      - "8000:7860"
+    volumes:
+      - clips-data:/tmp/freeclipper   # job files; auto-deleted after 2 hours by the app
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  clips-data:

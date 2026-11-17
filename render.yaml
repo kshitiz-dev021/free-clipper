@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: freeclipper-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATA_DIR
+        value: /tmp/freeclipper
+      - key: MAX_CONCURRENT_JOBS
+        value: "1"
+      - key: JOB_TTL_SECONDS
+        value: "7200"
+      - key: WHISPER_MODEL
+        value: tiny
+      - key: TRANSCRIBER
+        value: auto
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
